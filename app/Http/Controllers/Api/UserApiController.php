@@ -161,4 +161,26 @@ class UserApiController extends Controller
             return response()->json(['message'=>$message], 200);
         }
     }
+
+    //login
+    public function login(Request $request){
+        $user= User::where('email', $request->email)->first();
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response([
+                'message' => ['These credentials do not match our records.']
+            ], 404);
+        }
+
+        if(!$user || !Hash::check($request->password, $user->password)){
+            return response([
+                'message'=> ['These Credentials do not match our records.']
+            ], 404);
+        }
+        $token = $user->createToken('my-app-token')->plainTextToken;
+        $response = [
+            'user'=>$user,
+            'token'=>$token,
+        ];
+        return response($response, 201);
+    }
 }

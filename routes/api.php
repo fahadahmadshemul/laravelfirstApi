@@ -18,26 +18,32 @@ use App\Http\Controllers\Api\UserApiController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-//get user from api
-Route::get('/users/{id?}', [UserApiController::class, 'showUser']);
-//add data by api
-Route::post('add-user', [UserApiController::class, 'addUser']);
-//add multiple user
-Route::post('add-multiple-user', [UserApiController::class, 'addMultipleUser']);
-//update user
-Route::put('update-user/{id}', [UserApiController::class, 'update_user']);
 
-//patch for single data update
-Route::patch('update-single-column/{id}', [UserApiController::class, 'single_column_update']);
 
-//delete single user
-Route::delete('delete-single-user/{id}', [UserApiController::class, 'delete_singleUser']);
 
-//delete user by column info
-Route::delete('delete-by-json', [UserApiController::class, 'deleteByJson']);
+Route::group(['middleware'=> 'auth:sanctum'], function(){
+    //get user from api
+    Route::get('/users/{id?}', [UserApiController::class, 'showUser']);
+    //add data by api
+    Route::post('add-user', [UserApiController::class, 'addUser']);
+    //add multiple user
+    Route::post('add-multiple-user', [UserApiController::class, 'addMultipleUser']);
+    //update user
+    Route::put('update-user/{id}', [UserApiController::class, 'update_user']);
 
-//multiple delete by parameter
-Route::delete('muliple-delete-param/{ids}', [UserApiController::class, 'multipleDeleteParam']);
+    //patch for single data update
+    Route::patch('update-single-column/{id}', [UserApiController::class, 'single_column_update']);
 
-//multple delete by json
-Route::delete('multiple-delete-json', [UserApiController::class, 'multipleDeleteJson']);
+    //delete single user
+    Route::delete('delete-single-user/{id}', [UserApiController::class, 'delete_singleUser']);
+
+    //delete user by column info
+    Route::delete('delete-by-json', [UserApiController::class, 'deleteByJson']);
+
+    //multiple delete by parameter
+    Route::delete('muliple-delete-param/{ids}', [UserApiController::class, 'multipleDeleteParam']);
+
+    //multple delete by json
+    Route::delete('multiple-delete-json', [UserApiController::class, 'multipleDeleteJson']);
+});
+Route::post('login', [UserApiController::class, 'login']);
